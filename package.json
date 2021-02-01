@@ -21,6 +21,7 @@
     "expo-app-loading": "^1.0.1",
     "expo-status-bar": "~1.0.3",
     "graphql": "^15.4.0",
+    "prop-types": "^15.7.2",
     "react": "16.13.1",
     "react-apollo-hooks": "^0.5.0",
     "react-dom": "16.13.1",
