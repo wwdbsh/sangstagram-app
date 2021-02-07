@@ -34,20 +34,19 @@ export default ({navigation}) => {
         try{
             setLoading(true);
             const {data:{requestSecret}} = await requestSecretMutation();
-            if(requestSecret !== ""){
+            if(requestSecret){
                 Alert.alert("Check your email");
-                navigation.navigate("Confirm");
+                navigation.navigate("Confirm", {email:value});
                 return;
             }else{
                 Alert.alert("Account not found");
-                navigation.navigate("SignUp");
+                navigation.navigate("SignUp", {email:value});
             }
         }catch(e){
             Alert.alert("Can't log in now");
         }finally{
             setLoading(false);
         }
-        
     };
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
