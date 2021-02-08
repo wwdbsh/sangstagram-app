@@ -13,6 +13,18 @@ const View = styled.View`
     flex:1;
 `;
 
+const FBContainer = styled.View`
+    margin-top:25px;
+    padding-top:25px;
+    border-top-width:1px;
+    border-color:${props => props.theme.lightGreyColor};
+    border-style:solid;
+`;
+
+const GoogleContainer = styled.View`
+    margin-top:20px;
+`;
+
 export default ({route, navigation}) => {
     let email_ = "";
     if(route.params !== undefined){
@@ -48,9 +60,15 @@ export default ({route, navigation}) => {
         }
         try{
             setLoading(true);
-
+            const {data:{createAccount}} = await createAccountMutation();
+            if(createAccount){
+                Alert.alert("Account created", "Log in now!");
+                navigation.navigate("Login", {email});
+            }
         }catch(e){
-            Alert.alert("Can't log in now");
+            console.log(e);
+            Alert.alert("Username taken.", "Log in instead");
+            navigation.navigate("Login", {email})
         }finally{
             setLoading(false);
         }
@@ -82,6 +100,22 @@ export default ({route, navigation}) => {
                     autoCorrect={false}
                 />
                 <AuthButton loading={loading} onPress={handleSignup} text="Sign Up" />
+                <FBContainer>
+                    <AuthButton
+                     bgColor={"#2D4DA7"}
+                     loading={false}
+                     onPress={()=>null}
+                     text="Log in with Facebook"
+                    />
+                </FBContainer>
+                <GoogleContainer>
+                    <AuthButton
+                     bgColor={"#EE1922"}
+                     loading={false}
+                     onPress={()=>null}
+                     text="Log in with Google"
+                     />
+                </GoogleContainer>
             </View>
         </TouchableWithoutFeedback>
     );

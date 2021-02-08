@@ -1,5 +1,5 @@
 import React from "react";
-import { View } from "react-native";
+import { View, Image } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import Home from "../screens/Home";
@@ -7,6 +7,7 @@ import Search from "../screens/Search";
 import Notifications from "../screens/Notifications";
 import Profile from "../screens/Profile";
 import MessagesLink from "../components/MessagesLink";
+import NavIcon from "../components/NabIcon";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -27,6 +28,14 @@ export default () => {
             <Tab.Screen name="Home">
                 {() => stackFactory(Home, "Home", {
                         title:"Home",
+                        headerTitle: (
+                            <NavIcon name="logo-instagram" size={36}/>
+                        //  <Image
+                        //   style={{height:35}}
+                        //   resizeMode="contain"
+                        //   source={require("../assets/logo.png")}
+                        //   />
+                        ),
                         headerRight: () => <MessagesLink/>
                     }
                 )}

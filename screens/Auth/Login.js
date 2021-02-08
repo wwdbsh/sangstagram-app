@@ -13,8 +13,12 @@ const View = styled.View`
     flex:1;
 `;
 
-export default ({navigation}) => {
-    const emailInput = useInput("");
+export default ({route, navigation}) => {
+    let email_ = "";
+    if(route.params !== undefined){
+        email_ = route.params.email;
+    }
+    const emailInput = useInput(email_);
     const [loading, setLoading] = useState(false);
     const [requestSecretMutation] = useMutation(LOG_IN, {
         variables:{
