@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Image } from "react-native";
+import { View, Image, Platform } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import Home from "../screens/Home";
@@ -8,6 +8,8 @@ import Notifications from "../screens/Notifications";
 import Profile from "../screens/Profile";
 import MessagesLink from "../components/MessagesLink";
 import NavIcon from "../components/NabIcon";
+import { Ionicons } from "@expo/vector-icons";
+import { stackStyles } from "./config";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -17,24 +19,81 @@ const stackFactory = (initialRoute, name, customConfig) => (
         <Stack.Screen
          name={name}
          component={initialRoute}
-         options={{...customConfig, headerTitleAlign:"center"}}
+         options={{
+             ...customConfig, 
+             headerTitleAlign:"center",
+             headerStyle:{...stackStyles}
+            }}
         />
     </Stack.Navigator>
 );
 
 export default () => {
     return (
-        <Tab.Navigator>
+        <Tab.Navigator
+         screenOptions={({route}) => ({
+             tabBarIcon:({focused, color, size}) => {
+                 let iconName;
+                 const os = Platform.OS;
+                 switch(route.name){
+                     case "Home":
+                         if(focused){
+                            iconName = os === "ios" ? "ios-home" : "md-home";
+                         }else{
+                            iconName = os === "ios" ? "ios-home-outline" : "md-home-outline";
+                         }
+                         break;
+                     case "Search":
+                        if(focused){
+                            iconName = os === "ios" ? "ios-search" : "md-search";
+                         }else{
+                            iconName = os === "ios" ? "ios-search-outline" : "md-search-outline";
+                         }
+                         break;
+                     case "Add":
+                        size = 28;
+                        if(focused){
+                            iconName = os === "ios" ? "ios-add" : "md-add";
+                         }else{
+                            iconName = os === "ios" ? "ios-add-outline" : "md-add-outline";
+                         }
+                         break;
+                     case "Notifications":
+                        if(focused){
+                            iconName = os === "ios" ? "ios-heart" : "md-heart";
+                         }else{
+                            iconName = os === "ios" ? "ios-heart-outline" : "md-heart-outline";
+                         }
+                         break;
+                     case "Profile":
+                        if(focused){
+                            iconName = os === "ios" ? "ios-person" : "md-person";
+                         }else{
+                            iconName = os === "ios" ? "ios-person-outline" : "md-person-outline";
+                         }
+                 }
+                 return <Ionicons name={iconName} size={size} color={color} />
+             }
+         })}
+         tabBarOptions={{
+             showLabel:false,
+             activeTintColor:"black",
+             inactiveTintColor:"black",
+             style:{
+                 backgroundColor:"#FAFAFA"
+             }
+         }}
+        >
             <Tab.Screen name="Home">
                 {() => stackFactory(Home, "Home", {
                         title:"Home",
                         headerTitle: (
-                            <NavIcon name="logo-instagram" size={36}/>
-                        //  <Image
-                        //   style={{height:35}}
-                        //   resizeMode="contain"
-                        //   source={require("../assets/logo.png")}
-                        //   />
+                        //  <NavIcon name="logo-instagram" size={36}/>
+                         <Image
+                          style={{height:35}}
+                          resizeMode="contain"
+                          source={require("../assets/logo.png")}
+                          />
                         ),
                         headerRight: () => <MessagesLink/>
                     }
