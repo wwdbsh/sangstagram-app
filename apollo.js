@@ -1,6 +1,6 @@
 const options = {
     // uri:"http://localhost:4000"
-    uri:"http://26afca808bee.ngrok.io"
+    uri:"http://65de19952427.ngrok.io"
 };
 
 export default options;
