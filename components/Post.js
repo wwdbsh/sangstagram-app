@@ -1,10 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import { Image, Platform } from "react-native";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import Swiper from "react-native-swiper";
+import { gql } from "apollo-boost";
 import constants from "../constants";
 import { Ionicons } from "@expo/vector-icons";
+import styles from "../styles";
+import { useMutation } from "react-apollo-hooks";
+
+export const TOGGLE_LIKE = gql`
+  mutation toggelLike($postId: String!) {
+    toggleLike(postId: $postId)
+  }
+`;
 
 const Container = styled.View``;
 const Header = styled.View`
@@ -23,15 +32,62 @@ const Location = styled.Text`
     font-size:12px;
 `;
 const IconsContainer = styled.View`
-    padding:10px;
     flex-direction:row;
+    margin-bottom:5px;
 `;
 
 const IconContainer = styled.View`
     margin-right:10px;
 `;
 
-const Post = ({user, locations, files=[]}) => {
+const InfoContainer = styled.View`
+    padding:10px;
+`;
+
+const Caption = styled.Text`
+    margin:3px 0px;
+`;
+
+const CommentCount = styled.Text`
+    opacity:0.5;
+    font-size:13px;
+`;
+
+const Post = ({
+    id,
+    user,
+    locations,
+    files=[],
+    likeCount:likeCountProp,
+    caption,
+    comments=[],
+    isLiked:isLikedProp,
+    pressedBubble:pressdBubbleProp
+}) => {
+    const [isLiked, setIsLiked] = useState(isLikedProp);
+    const [likeCount, setLikeCount] = useState(likeCountProp);
+    const [pressedBubble, setPressedBubble] = useState(pressdBubbleProp);
+    const [toggleeLikeMutation] = useMutation(TOGGLE_LIKE, {
+        variables:{
+            postId:id
+        }
+    });
+    const handleLike = async () => {
+        if(isLiked === true){
+            setLikeCount(l => l-1);
+        }else{
+            setLikeCount(l => l+1);
+        }
+        setIsLiked(p => !p);
+        try{
+            await toggleeLikeMutation();
+        }catch(e){
+            console.log(e);
+        }
+    };
+    const handleBubble = () => {
+        setPressedBubble(b => !b);
+    };
     return (
         <Container>
             <Header>
@@ -60,32 +116,51 @@ const Post = ({user, locations, files=[]}) => {
                      />
                 ))}
             </Swiper>
-            <IconsContainer>
+            <InfoContainer>
+                <IconsContainer>
+                    <Touchable onPress={handleLike}>
+                        <IconContainer>
+                            <Ionicons
+                            size={24}
+                            color={isLiked ? styles.redColor : styles.blackColor}
+                            name={Platform.OS === "ios"
+                            ? isLiked
+                              ? "ios-heart"
+                              : "ios-heart-outline"
+                            : isLiked
+                              ? "md-heart"
+                              : "md-heart-outline"
+                            } 
+                            />
+                        </IconContainer>
+                    </Touchable>
+                    <Touchable onPress={handleBubble}>
+                        <IconContainer>
+                            <Ionicons
+                            size={24}
+                            color={pressedBubble && styles.blackColor}
+                            name={Platform.OS === "ios"
+                            ? pressedBubble
+                              ? "ios-chatbubble"
+                              : "ios-chatbubble-outline"
+                            : pressedBubble
+                              ? "md-chatbubble"
+                              : "md-chatbubble-outline"
+                            } 
+                            />
+                        </IconContainer>
+                    </Touchable>
+                </IconsContainer>
                 <Touchable>
-                    <IconContainer>
-                        <Ionicons
-                        size={28}
-                        name={Platform.OS === "ios" ? "ios-heart-outline" : "md-heart-outline"} 
-                        />
-                    </IconContainer>
+                    <Bold>{likeCount === 1 ? "1 like" : `${likeCount} likes`}</Bold>
                 </Touchable>
+                <Caption>
+                    <Bold>{user.username}</Bold> {caption}
+                </Caption>
                 <Touchable>
-                    <IconContainer>
-                        <Ionicons
-                        size={28}
-                        name={Platform.OS === "ios" ? "ios-heart-outline" : "md-heart-outline"} 
-                        />
-                    </IconContainer>
+                    <CommentCount>See all {comments.length} comments</CommentCount>
                 </Touchable>
-                <Touchable>
-                    <IconContainer>
-                        <Ionicons
-                        size={28}
-                        name={Platform.OS === "ios" ? "ios-heart-outline" : "md-heart-outline"} 
-                        />
-                    </IconContainer>
-                </Touchable>
-            </IconsContainer>
+            </InfoContainer>
         </Container>
     );
 };
