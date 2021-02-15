@@ -2,14 +2,16 @@ import React from "react";
 import { View, Image, Platform } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
-import Home from "../screens/Home";
-import Search from "../screens/Search";
-import Notifications from "../screens/Notifications";
-import Profile from "../screens/Profile";
+import Home from "../screens/Tabs/Home";
+import Search from "../screens/Tabs/Search/SearchContainer";
+import Notifications from "../screens/Tabs/Notifications";
+import Profile from "../screens/Tabs/Profile";
+import Detail from "../screens/Detail";
 import MessagesLink from "../components/MessagesLink";
 import NavIcon from "../components/NabIcon";
 import { Ionicons } from "@expo/vector-icons";
 import { stackStyles } from "./config";
+import styles from "../styles";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -24,6 +26,15 @@ const stackFactory = (initialRoute, name, customConfig) => (
              headerTitleAlign:"center",
              headerStyle:{...stackStyles}
             }}
+        />
+        <Stack.Screen
+         name={"Detail"}
+         component={Detail}
+         options={{
+             headerStyle:{...stackStyles},
+             headerTintColor:styles.blackColor,
+             title:"Photo"
+         }}
         />
     </Stack.Navigator>
 );
@@ -100,7 +111,11 @@ export default () => {
                 )}
             </Tab.Screen>
             <Tab.Screen name="Search">
-                {() => stackFactory(Search, "Search", {title:"Search"})}
+                {() => stackFactory(Search, "Search", {
+                        title:"Search",
+                        headerBackTitle:null
+                    }
+                )}
             </Tab.Screen>
             <Tab.Screen name="Add" component={View} listeners={({ navigation, route }) => ({
                 tabPress: e => {

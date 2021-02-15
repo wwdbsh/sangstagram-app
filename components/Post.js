@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Image, Platform } from "react-native";
+import { Image, Platform, View } from "react-native";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import Swiper from "react-native-swiper";
@@ -28,6 +28,8 @@ const HeaderUserContainer = styled.View`
 const Bold = styled.Text`
     font-weight:500;
 `;
+const Text = styled.Text``;
+const Comment = styled.Text``;
 const Location = styled.Text`
     font-size:12px;
 `;
@@ -35,19 +37,15 @@ const IconsContainer = styled.View`
     flex-direction:row;
     margin-bottom:5px;
 `;
-
 const IconContainer = styled.View`
     margin-right:10px;
 `;
-
 const InfoContainer = styled.View`
     padding:10px;
 `;
-
 const Caption = styled.Text`
     margin:3px 0px;
 `;
-
 const CommentCount = styled.Text`
     opacity:0.5;
     font-size:13px;
@@ -67,6 +65,7 @@ const Post = ({
     const [isLiked, setIsLiked] = useState(isLikedProp);
     const [likeCount, setLikeCount] = useState(likeCountProp);
     const [pressedBubble, setPressedBubble] = useState(pressdBubbleProp);
+    const [seeComment, setSeeComment] = useState(false);
     const [toggleeLikeMutation] = useMutation(TOGGLE_LIKE, {
         variables:{
             postId:id
@@ -87,6 +86,17 @@ const Post = ({
     };
     const handleBubble = () => {
         setPressedBubble(b => !b);
+    };
+    const handleSeeComment = () => {
+        setSeeComment(c => !c);
+    };
+    const organizeCaption = (caption) => {
+        let rt = "";
+        caption = caption.split(" ");
+        for(let i = 1; i < caption.length; i++){
+            rt += (caption[i] + " ");
+        }
+        return rt;
     };
     return (
         <Container>
@@ -155,11 +165,19 @@ const Post = ({
                     <Bold>{likeCount === 1 ? "1 like" : `${likeCount} likes`}</Bold>
                 </Touchable>
                 <Caption>
-                    <Bold>{user.username}</Bold> {caption}
+                    <Bold>{user.username}</Bold> {organizeCaption(caption)}
                 </Caption>
-                <Touchable>
-                    <CommentCount>See all {comments.length} comments</CommentCount>
+                {comments.length !== 0 &&
+                    <Touchable onPress={handleSeeComment}>
+                        {!seeComment && <CommentCount>View all {comments.length} comments</CommentCount>}
+                    </Touchable>
+                }
+                <Touchable onPress={handleSeeComment}>
+                    {seeComment && <CommentCount>Hide all comments</CommentCount>}
                 </Touchable>
+                {seeComment &&
+                    comments.map(obj => <Comment><Bold key={obj.id}>{obj.user.username}</Bold><Text> {obj.text}</Text></Comment>)
+                }
             </InfoContainer>
         </Container>
     );

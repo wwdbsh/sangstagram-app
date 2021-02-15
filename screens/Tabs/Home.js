@@ -3,37 +3,17 @@ import { RefreshControl, ScrollView } from "react-native";
 import styled from "styled-components";
 import { gql } from "apollo-boost";
 import { useQuery } from "react-apollo-hooks";
-import Loader from "../components/Loader";
-import Post from "../components/Post";
+import Loader from "../../components/Loader";
+import Post from "../../components/Post";
+import { POST_FRAGMENT } from "../../fragments";
 
 const FEED_QUERY = gql`
 {
     seeFeed{
-        id
-        locations
-        caption
-        user{
-            id
-            avatar
-            username
-        }
-        files{
-            id
-            url
-        }
-        likeCount
-        isLiked
-        comments{
-            id
-            text
-            user{
-                id
-                username
-            }
-        }
-        createdAt
+        ...PostParts
     }    
 }
+${POST_FRAGMENT}
 `;
 
 const View = styled.View`
