@@ -12,6 +12,7 @@ import NavIcon from "../components/NabIcon";
 import { Ionicons } from "@expo/vector-icons";
 import { stackStyles } from "./config";
 import styles from "../styles";
+import UserDetail from "../screens/UserDetail";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -24,7 +25,8 @@ const stackFactory = (initialRoute, name, customConfig) => (
          options={{
              ...customConfig, 
              headerTitleAlign:"center",
-             headerStyle:{...stackStyles}
+             headerStyle:{...stackStyles},
+             headerBackTitle:null
             }}
         />
         <Stack.Screen
@@ -33,8 +35,19 @@ const stackFactory = (initialRoute, name, customConfig) => (
          options={{
              headerStyle:{...stackStyles},
              headerTintColor:styles.blackColor,
-             title:"Photo"
+             title:"Photo",
+             headerBackTitle:null
          }}
+        />
+        <Stack.Screen
+         name={"UserDetail"}
+         component={UserDetail}
+         options={({route}) => ({
+             headerStyle:{...stackStyles},
+             headerTintColor:styles.blackColor,
+             title:route.params.username,
+             headerBackTitle:null
+         })}
         />
     </Stack.Navigator>
 );
