@@ -112,7 +112,6 @@ export default () => {
                 {() => stackFactory(Home, "Home", {
                         title:"Home",
                         headerTitle: (
-                        //  <NavIcon name="logo-instagram" size={36}/>
                          <Image
                           style={{height:35}}
                           resizeMode="contain"

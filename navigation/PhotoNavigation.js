@@ -10,6 +10,13 @@ import styles from "../styles";
 const Tab = createMaterialTopTabNavigator();
 const Stack = createStackNavigator();
 
+const stackScreenOption = (title) => ({
+    headerStyle:{...stackStyles},
+    headerBackTitle:null,
+    headerTintColor:styles.blackColor,
+    headerTitle:title
+});
+
 const PhotoTabs = () => {
     return (
         <Tab.Navigator
@@ -32,13 +39,17 @@ const PhotoTabs = () => {
 
 export default () => {
     return (
-        <Stack.Navigator
-         screenOptions={({route, navigation}) => ({
-             headerShown:!(route.name === "PhotoTabs")
-         })}
-        >
-            <Stack.Screen name="PhotoTabs" component={PhotoTabs} options={{headerStyle:{...stackStyles}}}/>
-            <Stack.Screen name="UploadPhoto" component={UploadPhoto} options={{headerStyle:{...stackStyles}}} />
+        <Stack.Navigator>
+            <Stack.Screen
+             name="PhotoTabs"
+             component={PhotoTabs}
+             options={stackScreenOption("Choose Photo")}
+            />
+            <Stack.Screen
+             name="UploadPhoto"
+             component={UploadPhoto}
+             options={stackScreenOption("Upload")}
+            />
         </Stack.Navigator>
     );
 };

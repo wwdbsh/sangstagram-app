@@ -48,6 +48,7 @@ const SearchPresenter = ({term, shouldFetch}) => {
              refreshing={refreshing}
             />
          }
+         contentContainerStyle={{flexDirection:"row", flexWrap:"wrap"}}
         >
             {loading ? (
                 <Loader/>

@@ -8,6 +8,7 @@ import constants from "../constants";
 import { useState } from "react";
 import SquarePhoto from "./SquarePhoto";
 import Post from "./Post";
+import { ScrollView } from "react-native-gesture-handler";
 
 const ProfileHeader = styled.View`
   padding:20px;
@@ -115,14 +116,16 @@ const UserProfile = ({
           </Button>
         </TouchableOpacity>
       </ButtonContainer>
-      {posts &&
-       posts.map(p =>
-        isGrid ? (
-        <SquarePhoto key={p.id} {...p} />
-        ) : (
-        <Post key={p.id} {...p} />
-        )
-      )}
+      <ScrollView contentContainerStyle={{flexDirection:"row", flexWrap:"wrap"}}>
+        {posts &&
+        posts.map(p =>
+          isGrid ? (
+          <SquarePhoto key={p.id} {...p} />
+          ) : (
+          <Post key={p.id} {...p} />
+          )
+        )}
+      </ScrollView>
     </View>
   );
 };
