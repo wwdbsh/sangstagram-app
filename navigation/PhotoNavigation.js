@@ -14,7 +14,7 @@ const stackScreenOption = (title) => ({
     headerStyle:{...stackStyles},
     headerBackTitle:null,
     headerTintColor:styles.blackColor,
-    headerTitle:title
+    headerTitle:title,
 });
 
 const PhotoTabs = () => {
@@ -46,7 +46,7 @@ export default () => {
              options={stackScreenOption("Choose Photo")}
             />
             <Stack.Screen
-             name="UploadPhoto"
+             name="Upload"
              component={UploadPhoto}
              options={stackScreenOption("Upload")}
             />
