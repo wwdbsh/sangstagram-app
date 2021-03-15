@@ -167,7 +167,7 @@ const Post = ({
                     <Bold>{likeCount === 1 ? "1 like" : `${likeCount} likes`}</Bold>
                 </Touchable>
                 <Caption>
-                    <Bold>{user.username}</Bold> {organizeCaption(caption)}
+                    <Bold>{user.username}</Bold> {caption}
                 </Caption>
                 {comments.length !== 0 &&
                     <Touchable onPress={handleSeeComment}>
